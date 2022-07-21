@@ -1,5 +1,5 @@
 
-param([switch]$includeDisabledRules, [switch]$includeLocalRules, [string]$RulesFile, [ValidateSet("Export","Import")]$OperationMode)
+param([switch]$includeDisabledRules, [switch]$includeLocalRules, [string]$RulesFile, [ValidateSet("Export","Import")]$OperationMode, [ValidateSet('usgov','german','china','global')]$TargetCloud)
 
 $ErrorActionPreference = 'Stop'
 
@@ -7,6 +7,17 @@ Import-Module Appx -UseWindowsPowerShell
 
 if (-not $RulesFile) { exit 1 }
 if (-not $OperationMode) { exit 1 }
+
+if ((-not $TargetCloud) -or ($TargetCloud -eq 'global'))
+{
+    $region = 'global'
+}
+else
+{
+    $region = $TargetCloud
+}
+$graphEndpointUri = (Get-MgEnvironment | Where-Object { $_.Name -like "*region*" }).GraphEndpoint
+if (-not $graphEndpointUri) { exit 1 }
 
 <#
   ## check for elevation   
@@ -44,11 +55,11 @@ try
 {
     if($includeLocalRules)
     {
-        Export-NetFirewallRule -RulesFile $RulesFile -OperationMode $OperationMode -EnabledOnly:$EnabledOnly -PolicyStoreSource "All"
+        Export-NetFirewallRule -RulesFile $RulesFile -GraphEndpointUri $graphEndpointUri -OperationMode $OperationMode -EnabledOnly:$EnabledOnly -PolicyStoreSource "All"
     }
     else
     {
-        Export-NetFirewallRule -RulesFile $RulesFile -OperationMode $OperationMode -EnabledOnly:$EnabledOnly
+        Export-NetFirewallRule -RulesFile $RulesFile -GraphEndpointUri $graphEndpointUri -OperationMode $OperationMode -EnabledOnly:$EnabledOnly
     }
 }  
 catch{

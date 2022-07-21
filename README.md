@@ -1,9 +1,6 @@
 # IntuneFirewallRulesMigration
 Intune firewall rules migration tool upgraded to PS 7 and the new Graph API cmdlets
 
-# TODO
-The graph api endpoint is hard-coded, must be fixed
-
 # Important
 
 To use these scripts, you must:
@@ -19,4 +16,4 @@ Export-FirewallRules.ps1 -OperationMode Export -includeLocalRules <$true/$false>
 
 # Importing firewall rules
 
-Export-FirewallRules.ps1 -OperationMode Import -RulesFile 'C:\tmp\file-with-the-dumped-rules.json'
+Export-FirewallRules.ps1 -OperationMode Import -RulesFile 'C:\tmp\file-with-the-dumped-rules.json' -TargetCloud <usgov/german/china/global>

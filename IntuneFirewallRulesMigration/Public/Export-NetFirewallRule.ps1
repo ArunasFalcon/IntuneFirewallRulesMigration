@@ -54,7 +54,8 @@ function Export-NetFirewallRule {
         $DeviceConfiguration,
         [string]
         $RulesFile,
-        [ValidateSet("Export","Import")]$OperationMode
+        [ValidateSet("Export","Import")]$OperationMode,
+        [string]$GraphEndpointUri
 
          
     )
@@ -82,7 +83,8 @@ function Export-NetFirewallRule {
         {
             return $(Get-Content -Path $RulesFile | ConvertFrom-Json | Send-IntuneFirewallRulesPolicy `
             -sendIntuneFirewallTelemetry:$sendExportTelemetry `
-            -DeviceConfiguration:$DeviceConfiguration
+            -DeviceConfiguration:$DeviceConfiguration `
+            -GraphEndpointUri $GraphEndpointUri
             )
         }
         

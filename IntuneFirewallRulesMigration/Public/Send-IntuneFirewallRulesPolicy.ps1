@@ -54,8 +54,10 @@ a
 
         # If this flag is toogled, then firewall rules would be imported to Device Configuration else it would be import to device intent
         [switch]
-        $DeviceConfiguration
+        $DeviceConfiguration,
 
+        [string]
+        $GraphEndpointUri
     )
 
     Begin { $firewallArr = @()}
@@ -148,11 +150,11 @@ a
                 Try {
                     
                     if($DeviceConfiguration){
-                        $successResponse = Invoke-MgGraphRequest -Uri 'https://microsoftgraph.chinacloudapi.cn/beta/devicemanagement/deviceconfigurations/' -Method POST -Body $NewIntuneObject -ContentType 'application/json'
+                        $successResponse = Invoke-MgGraphRequest -Uri "$GraphEndpointUri/beta/devicemanagement/deviceconfigurations/" -Method POST -Body $NewIntuneObject -ContentType 'application/json'
                         $successMessage = "`r`n$migratedProfileName-$profileNumber has been successfully imported to Intune (Device Configuration)`r`n"
                     }
                     else{
-                        $successResponse = Invoke-MgGraphRequest -Uri "https://microsoftgraph.chinacloudapi.cn/beta/deviceManagement/templates/4356d05c-a4ab-4a07-9ece-739f7c792910/createInstance" -Method POST -Body $NewIntuneObject -ContentType 'application/json'
+                        $successResponse = Invoke-MgGraphRequest -Uri "$GraphEndpointUri/beta/deviceManagement/templates/4356d05c-a4ab-4a07-9ece-739f7c792910/createInstance" -Method POST -Body $NewIntuneObject -ContentType 'application/json'
                         $successMessage = "`r`n$migratedProfileName-$profileNumber has been successfully imported to Intune (End-Point Security)`r`n"
                     }
                      
