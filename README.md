@@ -14,7 +14,7 @@ The export outputs empty rules. These should be removed before importing.
 
 # Exporting firewall rules
 
-Export-FirewallRules.ps1 -OperationMode Export -includeLocalRules <$true/$false> -RulesFile 'C:\tmp\file-to-dump-the-rules.json'
+Export-FirewallRules.ps1 -OperationMode Export <-includeLocalRules> -RulesFile 'C:\tmp\file-to-dump-the-rules.json'
 
 # Importing firewall rules
 
