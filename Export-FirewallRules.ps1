@@ -18,6 +18,7 @@ else
 }
 $graphEndpointUri = (Get-MgEnvironment | Where-Object { $_.Name -like "*$region*" }).GraphEndpoint
 if (-not $graphEndpointUri) { exit 1 }
+Write-Host "Regional graph api endpoint: $graphEndpointUri"
 
 <#
   ## check for elevation   
