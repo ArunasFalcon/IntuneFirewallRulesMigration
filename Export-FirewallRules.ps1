@@ -16,7 +16,7 @@ else
 {
     $region = $TargetCloud
 }
-$graphEndpointUri = (Get-MgEnvironment | Where-Object { $_.Name -like "*region*" }).GraphEndpoint
+$graphEndpointUri = (Get-MgEnvironment | Where-Object { $_.Name -like "*$region*" }).GraphEndpoint
 if (-not $graphEndpointUri) { exit 1 }
 
 <#
