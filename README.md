@@ -10,6 +10,8 @@ To use these scripts, you must:
 - For the rules import, you must manually run Connect-MgGraph to connect to a tenant in the same PowerShell session in which you will be running this script
 - For the rules import, the account used to connect to graph API must have sufficient permission to create firewall profiles
 
+The export outputs empty rules. These should be removed before importing.
+
 # Exporting firewall rules
 
 Export-FirewallRules.ps1 -OperationMode Export -includeLocalRules <$true/$false> -RulesFile 'C:\tmp\file-to-dump-the-rules.json'
