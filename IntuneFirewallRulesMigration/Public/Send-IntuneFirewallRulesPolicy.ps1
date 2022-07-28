@@ -57,7 +57,7 @@ a
         $DeviceConfiguration,
 
         [string]
-        $GraphEndpointUri
+        $TargetCloud
     )
 
     Begin { $firewallArr = @()}
@@ -72,6 +72,19 @@ a
     }
 
     End {
+
+        if ((-not $TargetCloud) -or ($TargetCloud -eq 'global'))
+        {
+            $region = 'global'
+        }
+        else
+        {
+            $region = $TargetCloud
+        }
+        $graphEndpointUri = (Get-MgEnvironment | Where-Object { $_.Name -like "*$region*" }).GraphEndpoint
+        if (-not $graphEndpointUri) { exit 1 }
+        Write-Host "Regional graph api endpoint: $graphEndpointUri"
+
         # Split the incoming firewall objects into separate profiles
         $profiles = @()
         $currentProfile = @()
@@ -150,11 +163,11 @@ a
                 Try {
                     
                     if($DeviceConfiguration){
-                        $successResponse = Invoke-MgGraphRequest -Uri "$GraphEndpointUri/beta/devicemanagement/deviceconfigurations/" -Method POST -Body $NewIntuneObject -ContentType 'application/json'
+                        $successResponse = Invoke-MgGraphRequest -Uri "$graphEndpointUri/beta/devicemanagement/deviceconfigurations/" -Method POST -Body $NewIntuneObject -ContentType 'application/json'
                         $successMessage = "`r`n$migratedProfileName-$profileNumber has been successfully imported to Intune (Device Configuration)`r`n"
                     }
                     else{
-                        $successResponse = Invoke-MgGraphRequest -Uri "$GraphEndpointUri/beta/deviceManagement/templates/4356d05c-a4ab-4a07-9ece-739f7c792910/createInstance" -Method POST -Body $NewIntuneObject -ContentType 'application/json'
+                        $successResponse = Invoke-MgGraphRequest -Uri "$graphEndpointUri/beta/deviceManagement/templates/4356d05c-a4ab-4a07-9ece-739f7c792910/createInstance" -Method POST -Body $NewIntuneObject -ContentType 'application/json'
                         $successMessage = "`r`n$migratedProfileName-$profileNumber has been successfully imported to Intune (End-Point Security)`r`n"
                     }
                      
