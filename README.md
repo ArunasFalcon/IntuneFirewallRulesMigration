@@ -33,6 +33,6 @@ $secret = '<secret value here>'
 $sec = $secret | ConvertTo-SecureString -AsPlainText -Force
 $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $appid,$sec
 Connect-AzAccount -Environment <sovereign cloud name or omit this parameter if you are connecting to global cloud> -ServicePrincipal -TenantId $tenant -Credential $credential
-$token = (Get-AzAccessToken -ResourceTypeName MSGraph).Token
+$token = (Get-AzAccessToken -AsSecureString -ResourceTypeName MSGraph).Token
 Connect-MgGraph -Environment <sovereign cloud name or omit this parameter if you are connecting to global cloud> -AccessToken $token
 ```
